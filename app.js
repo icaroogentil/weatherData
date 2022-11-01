@@ -7,18 +7,18 @@ var app = express();
 app.use(bodyParser.json());
 
 app.get("/weatherData", async function (req, res) {
-  var cep = req.query.cep;
-  const geoCode = await getGeocode(cep);
+  var zipCode = req.query.zipCode;
+  const geoCode = await getGeocode(zipCode);
   const weatherStation = await getWeatherStation(geoCode.ibge);
   res.send({
     instant_temperature: weatherStation.dados.TEM_INS,
     instant_moisture: weatherStation.dados.UMD_INS,
   });
 });
-const getGeocode = async (cep) => {
+const getGeocode = async (zipCode) => {
   var response;
   try {
-    response = await axios.get(`https://viacep.com.br/ws/${cep}/json`);
+    response = await axios.get(`https://viacep.com.br/ws/${zipCode}/json`);
     return response.data;
   } catch (error) {
     return error.message;
